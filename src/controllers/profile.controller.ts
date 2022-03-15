@@ -12,8 +12,6 @@ export async function addProfile(
     const result = await profileServices.addProfile(req.body);
     return res.send("Profile insertion to DB success");
   } catch (error) {
-    return res.status(500).send("Profile insertion to DB failed");
-  } catch {
     return res.status(500).send(getErrorMessage(error));
   }
 }
