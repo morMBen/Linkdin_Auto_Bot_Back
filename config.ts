@@ -4,6 +4,7 @@ export const corsConfig = {
     'https://localhost:3000',
     'http://appleseedsTodo.herokuapp.com',
     'https://appleseedsTodo.herokuapp.com',
+    `https://linkdin-auto-bot-back.herokuapp.com`,
   ],
   methods: ['GET', 'PUT', 'POST', 'DELETE'],
 };
