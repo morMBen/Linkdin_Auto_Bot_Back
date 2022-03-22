@@ -41,5 +41,5 @@ document.querySelector('div[role=dialog] > button');
 
 
 // next page in list 
-document.querySelector('div.artdeco-pagination.artdeco-pagination--has-controls > button[aria-label=Next');
+document.querySelector('div.artdeco-pagination.artdeco-pagination--has-controls > button[aria-label=Next]');
 // checked 

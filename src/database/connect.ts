@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 import { config } from 'dotenv';
 import * as path from 'path';
 
-console.log(config({ path: path.resolve(__dirname, '../mongo-atlas.env') }));
+config({ path: path.resolve(__dirname, '../.env') });
 
 export async function connectDb(): Promise<void> {
   try { 
