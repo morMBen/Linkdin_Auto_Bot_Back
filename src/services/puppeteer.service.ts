@@ -1,8 +1,7 @@
-import * as fs from 'fs';
 import puppeteer, { Page } from 'puppeteer';
 import { config } from 'dotenv';
 import * as path from 'path';
-import { getRandomTimeInterval } from '../utils/misc.util';
+import * as utils from '../utils/puppeteer.util';
 
 config({ path: path.resolve(__dirname, '../.env') });
 
@@ -12,7 +11,7 @@ export const linkedinScraper = async () => {
     const browser = await puppeteer.launch({ 
       headless: false,
       defaultViewport: null,
-      slowMo: getRandomTimeInterval(500),
+      slowMo: utils.getRandomTimeInterval(500),
     });
 
     const page: Page = await browser.newPage();
@@ -37,7 +36,7 @@ export const linkedinScraper = async () => {
 
 const getSearchResults = async (page: Page): Promise<string[]> => {
 
-  await setLinkedinCookies(page);
+  await utils.setLinkedinCookies(page);
 
   await page.goto(`${process.env.SEARCH_URI}`);
   await page.waitForTimeout(Math.random() * 30000 + 10000);
@@ -45,10 +44,16 @@ const getSearchResults = async (page: Page): Promise<string[]> => {
   const results: string[] = [];
   let result: string[] = [];
   let nextBtn;
-  
-  // do{
-    await page.evaluate('window.scrollTo(0, document.body.scrollHeight)');
-    await page.waitForSelector('div.artdeco-pagination.artdeco-pagination--has-controls > button[aria-label=Next]');
+  let i = 0;
+
+  while (true) {
+    // await page.evaluate('window.scrollTo(0, document.body.scrollHeight)');
+    await scrollToBottom(page);
+    console.log("after scrollToBottom");
+    console.log(i++);
+    
+    // await autoScroll(page);
+    
     
     result = await page.evaluate(() => {
       const groupRefs: string[] = [];
@@ -65,49 +70,54 @@ const getSearchResults = async (page: Page): Promise<string[]> => {
 
     results.push(...result);
     // 
-    page.on('console', async (msg) => {
-      const msgArgs = msg.args();
-      for (let i = 0; i < msgArgs.length; ++i) {
-        console.log(await msgArgs[i].jsonValue());
-      }
-    });
+    // page.on('console', async (msg) => {
+    //   const msgArgs = msg.args();
+    //   for (let i = 0; i < msgArgs.length; ++i) {
+    //     console.log(await msgArgs[i].jsonValue());
+    //   }
+    // });
     //
+
+    await page.waitForSelector('button[aria-label=Next]'); //div.artdeco-pagination.artdeco-pagination--has-controls > 
+    // nextBtn = await page.$eval('button[aria-label=Next]', btn => btn as HTMLButtonElement);
     nextBtn = await page.evaluate(() => {
-      const tmp = document.querySelector(
-        'div.artdeco-pagination.artdeco-pagination--has-controls > button[aria-label=Next]'
-      );
-      console.log("tmp: ", tmp);
-      return tmp;
+      return document.querySelector(
+        'button[aria-label=Next]' //div.artdeco-pagination.artdeco-pagination--has-controls > 
+      )  as HTMLButtonElement;
+      // console.log("tmp: ", tmp);
+      // return tmp;
     });
 
     console.log("nextBtn: ", nextBtn);
     
-
-  //   page.click('div.artdeco-pagination.artdeco-pagination--has-controls > button[aria-label=Next]');
+    if ((nextBtn as HTMLButtonElement).disabled) {
+      break;
+    }
+    page.click('button[aria-label=Next]'); //div.artdeco-pagination.artdeco-pagination--has-controls > 
   
-  // } while (!( nextBtn as HTMLButtonElement).disabled) 
+  }
   
-  await getLinkedinCookies(page);
+  await utils.getLinkedinCookies(page);
 
   return result;
 };
 
-async function setLinkedinCookies(page: Page): Promise<void> {
-  const storedCookies = fs.readFileSync('./cookies.json', 'utf8');
-  const deserializedCookies = JSON.parse(storedCookies);
-  await page.setCookie(...deserializedCookies);
-}
+// async function setLinkedinCookies(page: Page): Promise<void> {
+//   const storedCookies = fs.readFileSync('./cookies.json', 'utf8');
+//   const deserializedCookies = JSON.parse(storedCookies);
+//   await page.setCookie(...deserializedCookies);
+// }
 
-async function getLinkedinCookies(page: Page): Promise<void> {
-  const cookies = await page.cookies();
-  const cookieJson = JSON.stringify(cookies);
-  fs.writeFileSync('./cookies.json', cookieJson);
-}
+// async function getLinkedinCookies(page: Page): Promise<void> {
+//   const cookies = await page.cookies();
+//   const cookieJson = JSON.stringify(cookies);
+//   fs.writeFileSync('./cookies.json', cookieJson);
+// }
 
 
 async function autoScroll(page: Page){
   await page.evaluate(async () => {
-      await new Promise<void>((resolve, reject) => {
+      await new Promise<void>((resolve) => {
           let totalHeight = 0;
           let distance = 400;
           let timer = setInterval(() => {
@@ -119,9 +129,27 @@ async function autoScroll(page: Page){
                   clearInterval(timer);
                   resolve();
               }
-          }, getRandomTimeInterval(500));
+          }, utils.getRandomTimeInterval(500));
       });
   });
+}
+
+
+async function scrollToBottom(page: Page) {
+  const distance = 100; // distance to scroll by
+  const delay = 100; // delay in ms
+  while (
+    await page.evaluate(
+      () =>
+        document.scrollingElement.scrollTop + window.innerHeight <
+        document.scrollingElement.scrollHeight
+    ) // while bottom is not reached scroll
+  ) {
+    await page.evaluate((y) => {
+      document.scrollingElement.scrollBy(0, y);
+    }, distance);
+    await page.waitForTimeout(delay);
+  }
 }
 
 
