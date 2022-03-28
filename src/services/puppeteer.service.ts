@@ -42,8 +42,7 @@ const getSearchResults = async (page: Page): Promise<string[]> => {
   await page.waitForTimeout(Math.random() * 30000 + 10000);
   
   const results: string[] = [];
-  let result: string[] = [];
-  let nextBtn;
+  let pageResult: string[] = [];
   let i = 0;
 
   while (true) {
@@ -55,7 +54,7 @@ const getSearchResults = async (page: Page): Promise<string[]> => {
     // await autoScroll(page);
     
     
-    result = await page.evaluate(() => {
+    pageResult = await page.evaluate(() => {
       const groupRefs: string[] = [];
       let linksGroup: NodeListOf<Element> = document.querySelectorAll(
         'span.entity-result__title-line.entity-result__title-line--2-lines > span > a'
@@ -68,7 +67,7 @@ const getSearchResults = async (page: Page): Promise<string[]> => {
       return groupRefs;
     });
 
-    results.push(...result);
+    results.push(...pageResult);
     // 
     // page.on('console', async (msg) => {
     //   const msgArgs = msg.args();
@@ -78,28 +77,27 @@ const getSearchResults = async (page: Page): Promise<string[]> => {
     // });
     //
 
-    await page.waitForSelector('button[aria-label=Next]'); //div.artdeco-pagination.artdeco-pagination--has-controls > 
-    // nextBtn = await page.$eval('button[aria-label=Next]', btn => btn as HTMLButtonElement);
-    nextBtn = await page.evaluate(() => {
-      return document.querySelector(
-        'button[aria-label=Next]' //div.artdeco-pagination.artdeco-pagination--has-controls > 
-      )  as HTMLButtonElement;
-      // console.log("tmp: ", tmp);
-      // return tmp;
-    });
+    // document.querySelector("ul.artdeco-pagination__pages").lastElementChild.getAttribute("data-test-pagination-page-btn");
+
+    const isButton = await page.waitForSelector('button[aria-label=Next]'); 
+    if(!isButton) {
+      console.log("isButton:",false)
+      await page.waitForTimeout(10000)
+    }
+    const nextBtn = await page.evaluate(() => document.querySelector('button[aria-label=Next]'))
 
     console.log("nextBtn: ", nextBtn);
     
     if ((nextBtn as HTMLButtonElement).disabled) {
       break;
     }
-    page.click('button[aria-label=Next]'); //div.artdeco-pagination.artdeco-pagination--has-controls > 
+    page.click('button[aria-label=Next]'); 
   
   }
   
   await utils.getLinkedinCookies(page);
 
-  return result;
+  return results;
 };
 
 // async function setLinkedinCookies(page: Page): Promise<void> {
@@ -138,9 +136,14 @@ async function autoScroll(page: Page){
 async function scrollToBottom(page: Page) {
   const distance = 100; // distance to scroll by
   const delay = 100; // delay in ms
+
+
+
+
   while (
     await page.evaluate(
       () =>
+      
         document.scrollingElement.scrollTop + window.innerHeight <
         document.scrollingElement.scrollHeight
     ) // while bottom is not reached scroll
