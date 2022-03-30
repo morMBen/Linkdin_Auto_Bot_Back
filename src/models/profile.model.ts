@@ -16,7 +16,7 @@ import mongoose from 'mongoose';
 // }
 
 export interface ProfileDocument extends mongoose.Document {
-  userId: string; // typeof mongoose.Types.ObjectId;
+  //userId: typeof mongoose.Types.ObjectId;
   name: string;
   profileName: string;
   position: string;
@@ -33,10 +33,10 @@ export interface ProfileDocument extends mongoose.Document {
 }
 
 const profileSchema:mongoose.Schema<ProfileDocument> = new mongoose.Schema({
-  userId: {
-    type: String// mongoose.Types.ObjectId,
-    // required
-  },
+  // userId: {
+  //   type: String// mongoose.Types.ObjectId,
+  //   // required
+  // },
   name: String,
   profileName: String,
   position: String,

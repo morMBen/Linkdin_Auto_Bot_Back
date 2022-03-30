@@ -1,8 +1,8 @@
 import * as fs from 'fs';
 import { Page } from 'puppeteer';
 
-export function getRandomTimeInterval(rangeMiliSecs: number): number {
-  return Math.random() * rangeMiliSecs + 500;
+export function getRandomTimeInterval(timeRange: number, minTime: number): number {
+  return Math.random() * timeRange + minTime;
 };
 
 export async function setLinkedinCookies(page: Page): Promise<void> {
@@ -18,7 +18,7 @@ export async function getLinkedinCookies(page: Page): Promise<void> {
 }
 
 export async function scrollToBottom(page: Page) {
-  const delay = getRandomTimeInterval(500); 
+  const delay = getRandomTimeInterval(500, 750); 
 
   async function isMoreSpaceToScroll(): Promise<boolean> {
     return await page.evaluate(() => {
