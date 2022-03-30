@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "ts-node ./dist/src/index.js",
-    "puppeteer": "ts-node-dev --transpile-only ./src/services/puppeteer_v2.ts",
+    "puppeteer": "ts-node-dev --transpile-only ./src/services/puppeteer.service.ts",
     "dev-build": "tsc && npm run start",
     "postinstall": "tsc",
     "dev": "ts-node-dev --respawn --transpile-only ./src/index.ts",
