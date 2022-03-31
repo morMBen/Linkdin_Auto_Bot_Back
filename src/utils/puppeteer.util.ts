@@ -17,34 +17,31 @@ export async function getLinkedinCookies(page: Page): Promise<void> {
   fs.writeFileSync('./cookies.json', cookieJson);
 }
 
-export async function scrollToBottom(page: Page) {
-  const delay = getRandomTimeInterval(500, 750); 
 
-  async function isMoreSpaceToScroll(): Promise<boolean> {
-    return await page.evaluate(() => {
-      if (window && document.scrollingElement) {
+async function isMoreSpaceToScroll(page: Page): Promise<boolean> {
+  return await page.evaluate(() => {
+    if (window && document.scrollingElement) {
 
-        return document.scrollingElement.scrollTop + window.innerHeight < document.scrollingElement.scrollHeight
-      }
-      return false;
-    })
-  };
-
-  async function scrollDown() {
-    let toScroll = await isMoreSpaceToScroll()
-
-    while (toScroll) {
-      await page.evaluate(() => {
-        const distance = window.outerHeight / Math.floor(Math.random() * 4);
-        document.scrollingElement?.scrollBy(0, distance)
-      });
-
-      await page.waitForTimeout(delay);
-
-      toScroll = await isMoreSpaceToScroll()
+      return document.scrollingElement.scrollTop + window.innerHeight < document.scrollingElement.scrollHeight
     }
-  };
+    return false;
+  })
+};
 
-  await scrollDown();
-}
+
+export async function scrollToBottom(page: Page) {
+  const delay = getRandomTimeInterval(500, 750);
+  let toScroll = await isMoreSpaceToScroll(page);
+
+  while (toScroll) {
+    await page.evaluate(() => {
+      const distance = window.outerHeight / Math.floor(Math.random() * 4);
+      document.scrollingElement?.scrollBy(0, distance);
+    });
+
+    await page.waitForTimeout(delay);
+
+    toScroll = await isMoreSpaceToScroll(page);
+  }
+};
 

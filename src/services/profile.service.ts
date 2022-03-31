@@ -3,7 +3,7 @@ import {
 } from 'mongoose';
 import ProfileModel, { ProfileDocument } from '../models/profile.model';
 
-export async function addProfile(
+export async function addProfiles(
   data: DocumentDefinition<ProfileDocument>
 ) {
   try {

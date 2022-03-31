@@ -1,4 +1,4 @@
-import puppeteer, { Page } from 'puppeteer';
+import puppeteer, { Page, ElementHandle } from 'puppeteer';
 import { config } from 'dotenv';
 import * as path from 'path';
 import * as utils from '../utils/puppeteer.util';
@@ -19,16 +19,7 @@ export const linkedinScraper = async () => {
     const page: Page = await browser.newPage();
     await utils.setLinkedinCookies(page);
 
-    const scrapedProfiles: ProfileDocument[] = [];
-    const profilesURLs = await getSearchResults(page);
-
-    for (const profile of profilesURLs) {
-      const profileData = await scrapeSingleProfile(page, profile);
-      if (profileData) {
-        scrapedProfiles.push(profileData);
-      }
-    }
-    
+    const scrapedProfiles: ProfileDocument[] = await getAllProfilesData(page);
     console.log(scrapedProfiles);
     
     return scrapedProfiles;
@@ -41,18 +32,37 @@ export const linkedinScraper = async () => {
 }
 
 
-async function getSearchResults(page: Page): Promise<any> {
+async function getAllProfilesData(page: Page): Promise<ProfileDocument[]> {
+  try {
+    const scrapedProfiles: ProfileDocument[] = [];
+    const profilesURLs = await getAllLinks(page);
+  
+    for (const profile of profilesURLs) {
+      const profileData = await scrapeSingleProfile(page, profile);
+      if (profileData) {
+        scrapedProfiles.push(profileData);
+      }
+    }
+    
+    return scrapedProfiles;
+} catch (error) {
+  console.error(error);
+  throw error;
+}
+}
+
+
+async function getAllLinks(page: Page): Promise<any> {
   try {
     await page.goto(`${process.env.SEARCH_URI}`);
   
     const searchResults: string[] = [];
-    let isNext: boolean = true;
 
-    while (isNext) {
+    while (true) {
       await page.waitForTimeout(utils.getRandomTimeInterval(30000, 10000));
       await utils.scrollToBottom(page);
       
-      const pageResult: string[] = await scrapeProfilesLinks(page);
+      const pageResult: string[] = await scrapePageLinks(page);
       searchResults.push(...pageResult);
   
       const nextPageButton = await getNextButton(page);
@@ -72,7 +82,7 @@ async function getSearchResults(page: Page): Promise<any> {
 };
 
 
-async function scrapeProfilesLinks(page: Page): Promise<string[]> {
+async function scrapePageLinks(page: Page): Promise<string[]> {
   try {
     const pageResult = await page.evaluate(() => {
       const groupRefs: string[] = [];
@@ -95,7 +105,7 @@ async function scrapeProfilesLinks(page: Page): Promise<string[]> {
 }
 
 
-async function getNextButton(page: Page) {
+async function getNextButton(page: Page): Promise<ElementHandle | null> {
 
   const nextPageButton = await page.$('button[aria-label=Next]');
   if (!nextPageButton) {
