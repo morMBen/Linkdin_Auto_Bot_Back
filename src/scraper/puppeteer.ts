@@ -166,4 +166,4 @@ async function scrapeSingleProfile(page: Page, url: string): Promise<ProfileDocu
 }
 
 
-linkedinScraper()
+// linkedinScraper()

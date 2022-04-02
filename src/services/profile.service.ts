@@ -3,19 +3,16 @@ import {
 } from 'mongoose';
 import ProfileModel, { ProfileDocument } from '../models/profile.model';
 
-export async function addProfiles(
-  data: DocumentDefinition<ProfileDocument>
-) {
+export async function addProfiles(data: DocumentDefinition<ProfileDocument[]>): Promise<void> {
   try {
-    const newModel = await ProfileModel.insertMany(data);
-    return;
+    await ProfileModel.insertMany(data);
   } catch (error) {
-    throw '';
+    throw error;
   }  
 }
 
 export async function getAllProfiles() {
-  return ProfileModel.find({}).lean();
+  return await ProfileModel.find({});
 }
 
 export async function updateProfile(
@@ -23,12 +20,13 @@ export async function updateProfile(
   update: UpdateQuery<ProfileDocument>,
   options: QueryOptions = { new: true },
 ) {
-  return ProfileModel.findOneAndUpdate(query, update, options);
+  return await ProfileModel.findOneAndUpdate(query, update, options);
 }
 
 
 export async function deleteProfile(
   query: FilterQuery<ProfileDocument>,
-  options: QueryOptions = { projection: 'email' }) {
-  return ProfileModel.findOneAndRemove(query, options);
+  options: QueryOptions = { projection: 'profileLink' }
+) {
+  return await ProfileModel.findOneAndRemove(query, options);
 }

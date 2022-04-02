@@ -2,14 +2,14 @@ import { Request, Response } from 'express';
 import { getErrorMessage } from '../utils/errors.util';
 import { ProfileDocument } from '../models/profile.model'
 import * as profileServices from '../services/profile.service';
-import { linkedinScraper } from '../scraper/puppeteer';
 
 // TODO: check if profile exist in deletedProfiles collection
-export async function addProfiles(req: Request, res: Response) {
+export async function addProfiles(
+  req: Request<{}, {}, ProfileDocument[]>,
+  res: Response
+) {
   try {
-    // const scrapResults = await linkedinScraper();
-    // const newProfiles = utils.filterNewProfiles(scrapResults);
-    const result = await profileServices.addProfiles(req.body); //newProfiles);
+    const result = await profileServices.addProfiles(req.body);
     return res.send("Profile insertion to DB success");
   } catch (error) {
     return res.status(500).send(getErrorMessage(error));

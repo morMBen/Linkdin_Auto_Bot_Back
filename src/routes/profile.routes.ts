@@ -10,7 +10,7 @@ Router.get('/healthcheck', (req: Request, res: Response): void => {
   res.sendStatus(200);
 });
 
-Router.post('/profiles', profileControllers.addProfile);
+Router.post('/profiles', profileControllers.addProfiles);
 
 Router.get('/profiles', profileControllers.getAllProfiles);
 
