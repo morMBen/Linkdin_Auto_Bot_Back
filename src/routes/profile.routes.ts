@@ -12,7 +12,7 @@ Router.get('/healthcheck', (req: Request, res: Response): void => {
 
 Router.post('/profiles', profileControllers.addProfiles);
 
-Router.get('/profiles', profileControllers.getAllProfiles);
+Router.get('/profiles', profileControllers.getProfiles);
 
 Router.put('/profile', profileControllers.updateProfile);
 

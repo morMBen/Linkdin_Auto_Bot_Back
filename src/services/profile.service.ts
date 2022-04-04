@@ -11,7 +11,7 @@ export async function addProfiles(data: DocumentDefinition<ProfileDocument[]>): 
   }  
 }
 
-export async function getAllProfiles() {
+export async function getProfiles() {
   return await ProfileModel.find({});
 }
 

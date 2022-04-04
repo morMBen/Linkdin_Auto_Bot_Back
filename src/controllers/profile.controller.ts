@@ -3,7 +3,7 @@ import { getErrorMessage } from '../utils/errors.util';
 import { ProfileDocument } from '../models/profile.model'
 import * as profileServices from '../services/profile.service';
 
-// TODO: check if profile exist in deletedProfiles collection
+
 export async function addProfiles(
   req: Request<{}, {}, ProfileDocument[]>,
   res: Response
@@ -16,9 +16,12 @@ export async function addProfiles(
   }
 }
 
-export async function getAllProfiles(req: Request, res: Response) {
+export async function getProfiles(
+  req: Request<{}, {}, {}, ProfileDocument>, 
+  res: Response) {
   try {
-    const profiles = await profileServices.getAllProfiles();
+    const filter = {$match: }
+    const profiles = await profileServices.getProfiles();
     return res.send(profiles || []);
   } catch (error) {
     return res.status(500).send(getErrorMessage(error));
@@ -30,13 +33,12 @@ export async function updateProfile(
   res: Response
 ) {
   try {
-    const {profileId} = req.query;
     const update = req.body;
     if (!update) {
       return res.status(400).send("Update required in body"); 
     }
 
-    const result = await profileServices.updateProfile({ _id: profileId }, update);
+    const result = await profileServices.updateProfile({ _id: update._id }, update);
     if (!result) {
       return res.status(404).send("Profile not found");
     }

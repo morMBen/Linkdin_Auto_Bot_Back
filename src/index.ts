@@ -9,4 +9,4 @@ const SERVER_MESSAGE = process.env.PORT
 // tslint:disable-next-line: no-console
 app.listen(PORT, () => console.log(SERVER_MESSAGE));
 
-addScrapedProfilesToDB();
+// addScrapedProfilesToDB();
