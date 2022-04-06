@@ -5,7 +5,7 @@ import mongoose from 'mongoose';
 //   profileName: string;
 //   position: string;
 //   email: string;
-//   linkdinLink: string;
+//   profileLink: string;
 //   isEmailSent: boolean;
 //   isStared: boolean;
 //   isVmarked: boolean;
@@ -16,38 +16,48 @@ import mongoose from 'mongoose';
 // }
 
 export interface ProfileDocument extends mongoose.Document {
-  userId: string; // typeof mongoose.Types.ObjectId;
+  //userId: typeof mongoose.Types.ObjectId;
   name: string;
-  profileName: string;
   position: string;
   email: string;
-  linkdinLink: string;
-  isEmailSent: boolean;
-  isStared: boolean;
-  isVmarked: boolean;
+  profileLink: string;
   tags: string[];
   imageSrc: string;
   comment: string;
+  isEmailSent: boolean;
+  isStared: boolean;
+  isVmarked: boolean;
   createdAt: Date
   updatedAt: Date
 }
 
 const profileSchema:mongoose.Schema<ProfileDocument> = new mongoose.Schema({
-  userId: {
-    type: String// mongoose.Types.ObjectId,
-    // required
-  },
+  // userId: {
+  //   type: String// mongoose.Types.ObjectId,
+  //   // required
+  // },
   name: String,
-  profileName: String,
   position: String,
   email: String,
-  linkdinLink: String,
-  isEmailSent: Boolean,
-  isStared: Boolean,
-  isVmarked: Boolean,
+  profileLink: {
+    type: String,
+    unique: true,
+  },
   tags: [String],
   imageSrc: String,
   comment: String,
+  isEmailSent: {
+    type: Boolean,
+    default: false,
+  },
+  isStared: {
+    type: Boolean,
+    default: false,
+  },
+  isVmarked: {
+    type: Boolean,
+    default: false,
+  },
 }, {
   timestamps: true,
 });

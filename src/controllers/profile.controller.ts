@@ -4,12 +4,12 @@ import { ProfileDocument } from '../models/profile.model'
 import * as profileServices from '../services/profile.service';
 
 // TODO: check if profile exist in deletedProfiles collection
-export async function addProfile(
-  req: Request<{}, {}, ProfileDocument>,
+export async function addProfiles(
+  req: Request<{}, {}, ProfileDocument[]>,
   res: Response
 ) {
   try {
-    const result = await profileServices.addProfile(req.body);
+    const result = await profileServices.addProfiles(req.body);
     return res.send("Profile insertion to DB success");
   } catch (error) {
     return res.status(500).send(getErrorMessage(error));
