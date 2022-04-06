@@ -1,5 +1,5 @@
 import { app } from './app';
-import { addScrapedProfilesToDB } from './scraper/scraper.controller';
+// import { addScrapedProfilesToDB } from './scraper/scraper.controller';
 
 const PORT = process.env.PORT || 8080;
 const SERVER_MESSAGE = process.env.PORT
@@ -9,4 +9,4 @@ const SERVER_MESSAGE = process.env.PORT
 // tslint:disable-next-line: no-console
 app.listen(PORT, () => console.log(SERVER_MESSAGE));
 
-addScrapedProfilesToDB();
+// addScrapedProfilesToDB();

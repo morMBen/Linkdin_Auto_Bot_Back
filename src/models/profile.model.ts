@@ -27,8 +27,9 @@ export interface ProfileDocument extends mongoose.Document {
   isEmailSent: boolean;
   isStared: boolean;
   isVmarked: boolean;
-  createdAt: Date
-  updatedAt: Date
+  isDeleted: boolean;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 const profileSchema:mongoose.Schema<ProfileDocument> = new mongoose.Schema({
@@ -55,6 +56,10 @@ const profileSchema:mongoose.Schema<ProfileDocument> = new mongoose.Schema({
     default: false,
   },
   isVmarked: {
+    type: Boolean,
+    default: false,
+  },
+  isDeleted: {
     type: Boolean,
     default: false,
   },

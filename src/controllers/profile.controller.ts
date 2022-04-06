@@ -2,8 +2,8 @@ import { Request, Response } from 'express';
 import { getErrorMessage } from '../utils/errors.util';
 import { ProfileDocument } from '../models/profile.model'
 import * as profileServices from '../services/profile.service';
+import { PipelineStage } from 'mongoose';
 
-// TODO: check if profile exist in deletedProfiles collection
 export async function addProfiles(
   req: Request<{}, {}, ProfileDocument[]>,
   res: Response
@@ -16,9 +16,28 @@ export async function addProfiles(
   }
 }
 
-export async function getAllProfiles(req: Request, res: Response) {
+export async function getProfiles(req: Request, res: Response) {
   try {
-    const profiles = await profileServices.getAllProfiles();
+    if (!req.body.filter || !req.body.sortBy) {
+      return res.sendStatus(400);
+    }
+
+    const { filter, sortBy } = req.body;
+    
+    if (typeof (filter) !== 'object' || typeof (sortBy) !== 'object') {
+      return res.sendStatus(400);
+    }
+
+    filter.isDeleted = false;
+
+    const stages: PipelineStage[] = [{ $match: filter }];
+
+    if (Object.keys(sortBy).length > 0) {
+      stages.push({ $sort: sortBy });
+    }
+    
+    const profiles = await profileServices.getProfiles(stages);
+
     return res.send(profiles || []);
   } catch (error) {
     return res.status(500).send(getErrorMessage(error));
@@ -30,18 +49,17 @@ export async function updateProfile(
   res: Response
 ) {
   try {
-    const {profileId} = req.query;
     const update = req.body;
     if (!update) {
-      return res.status(400).send("Update required in body"); 
+      return res.status(400).send("Update required in body");
     }
 
-    const result = await profileServices.updateProfile({ _id: profileId }, update);
+    const result = await profileServices.updateProfile({ _id: update._id }, update);
     if (!result) {
       return res.status(404).send("Profile not found");
     }
 
-    return res.send(result);    
+    return res.send(result);
   } catch (error) {
     return res.status(500).send(getErrorMessage(error));
   }

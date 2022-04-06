@@ -1,5 +1,5 @@
 import {
-  DocumentDefinition, FilterQuery, QueryOptions, UpdateQuery,
+  DocumentDefinition, FilterQuery, PipelineStage, QueryOptions, UpdateQuery,
 } from 'mongoose';
 import ProfileModel, { ProfileDocument } from '../models/profile.model';
 
@@ -8,11 +8,11 @@ export async function addProfiles(data: DocumentDefinition<ProfileDocument[]>): 
     await ProfileModel.insertMany(data);
   } catch (error) {
     throw error;
-  }  
+  }
 }
 
-export async function getAllProfiles() {
-  return await ProfileModel.find({});
+export async function getProfiles(stages: PipelineStage[]) {
+  return await ProfileModel.aggregate(stages);
 }
 
 export async function updateProfile(
@@ -24,9 +24,6 @@ export async function updateProfile(
 }
 
 
-export async function deleteProfile(
-  query: FilterQuery<ProfileDocument>,
-  options: QueryOptions = { projection: 'profileLink' }
-) {
-  return await ProfileModel.findOneAndRemove(query, options);
+export async function deleteProfile(query: FilterQuery<ProfileDocument>) {
+  return await ProfileModel.findById(query, {$set: {'isDeleted': true}});
 }
