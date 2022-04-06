@@ -24,9 +24,6 @@ export async function updateProfile(
 }
 
 
-export async function deleteProfile(
-  query: FilterQuery<ProfileDocument>,
-  options: QueryOptions = { projection: 'profileLink' }
-) {
-  return await ProfileModel.findOneAndRemove(query, options);
+export async function deleteProfile(query: FilterQuery<ProfileDocument>) {
+  return await ProfileModel.findById(query, {$set: {'isDeleted': true}});
 }

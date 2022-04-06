@@ -1,5 +1,5 @@
 import { app } from './app';
-import { addScrapedProfilesToDB } from './scraper/scraper.controller';
+// import { addScrapedProfilesToDB } from './scraper/scraper.controller';
 
 const PORT = process.env.PORT || 8080;
 const SERVER_MESSAGE = process.env.PORT

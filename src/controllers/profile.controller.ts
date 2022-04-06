@@ -28,6 +28,8 @@ export async function getProfiles(req: Request, res: Response) {
       return res.sendStatus(400);
     }
 
+    filter.isDeleted = false;
+
     const stages: PipelineStage[] = [{ $match: filter }];
 
     if (Object.keys(sortBy).length > 0) {
@@ -67,7 +69,7 @@ export async function updateProfile(
 export async function deleteProfile(req: Request, res: Response) {
   try {
     const { profileId } = req.query;
-
+    
     const result = await profileServices.deleteProfile({ _id: profileId });
     if (!result) {
       return res.status(404).send("Profile not found");
