@@ -45,3 +45,15 @@ export async function scrollToBottom(page: Page) {
   }
 };
 
+
+export function getSenitizedName(linkedInName: string) {
+  const senitized = linkedInName.slice(0, linkedInName.indexOf(','));
+  return lettersOnly(senitized);
+}
+
+// remove non-letters from a string.
+function lettersOnly(str: string) {
+  return str. replace(/[^a-zA-Z]/g, "");
+}
+
+

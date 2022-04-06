@@ -135,7 +135,7 @@ async function scrapeSingleProfile(page: Page, url: string): Promise<ProfileDocu
       if (imageSrc) profileData.imageSrc = (imageSrc as HTMLImageElement).src;
     
       const name =  document.querySelector('h1'); 
-      if (name) profileData.name = name.innerText;
+      if (name) profileData.name = utils.getSenitizedName(name.innerText);
     
       const position = document.querySelector('div.text-body-medium.break-words');
       if (position) profileData.position = (position as HTMLElement).innerText; 

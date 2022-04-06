@@ -1,5 +1,5 @@
 import {
-  DocumentDefinition, FilterQuery, QueryOptions, UpdateQuery,
+  DocumentDefinition, FilterQuery, PipelineStage, QueryOptions, UpdateQuery,
 } from 'mongoose';
 import ProfileModel, { ProfileDocument } from '../models/profile.model';
 
@@ -8,11 +8,11 @@ export async function addProfiles(data: DocumentDefinition<ProfileDocument[]>): 
     await ProfileModel.insertMany(data);
   } catch (error) {
     throw error;
-  }  
+  }
 }
 
-export async function getProfiles() {
-  return await ProfileModel.find({});
+export async function getProfiles(stages: PipelineStage[]) {
+  return await ProfileModel.aggregate(stages);
 }
 
 export async function updateProfile(
