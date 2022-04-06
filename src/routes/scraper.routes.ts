@@ -9,4 +9,4 @@ Router.get('/healthcheck', (req: Request, res: Response): void => {
   res.sendStatus(200);
 });
 
-Router.post('/scraper', scraperInit);
+Router.post('/crawler', scraperInit);

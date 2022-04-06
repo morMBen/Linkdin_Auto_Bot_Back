@@ -28,7 +28,7 @@ export async function getProfiles(req: Request, res: Response) {
       return res.sendStatus(400);
     }
 
-    filter.isDeleted = false;
+    // filter.isDeleted = false;
 
     const stages: PipelineStage[] = [{ $match: filter }];
 
