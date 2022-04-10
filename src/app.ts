@@ -24,7 +24,7 @@ app.use((err: any, req: Request, res: Response, next: NextFunction) => {
 
 app.use('/api', router);
 
-app.use(((req: Request, res: Response, next: any) => {
+app.use(((req: Request, res: Response, next: NextFunction) => {
   res.status(404).send('Page Not Found');
 })); //as express.ErrorRequestHandler);
 
