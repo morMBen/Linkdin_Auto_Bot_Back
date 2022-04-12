@@ -46,7 +46,10 @@ const profileSchema:mongoose.Schema<ProfileDocument> = new mongoose.Schema({
   },
   tags: [String],
   imageSrc: String,
-  comment: String,
+  comment: {
+    type: String,
+    default: "",
+  },
   isEmailSent: {
     type: Boolean,
     default: false,
