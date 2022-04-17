@@ -1,9 +1,11 @@
 import * as fs from 'fs';
+import * as path from 'path';
+import { config } from 'dotenv';
 import { Page } from 'puppeteer';
 
-export function getRandomTimeInterval(timeRange: number, minTime: number): number {
-  return Math.random() * timeRange + minTime;
-};
+config({ path: path.resolve(__dirname, '../.env') });
+
+// Scraped websites' cookies utils
 
 export async function setLinkedinCookies(page: Page): Promise<void> {
   const storedCookies = fs.readFileSync('./cookies.json', 'utf8');
@@ -17,6 +19,8 @@ export async function getLinkedinCookies(page: Page): Promise<void> {
   fs.writeFileSync('./cookies.json', cookieJson);
 }
 
+
+// Scroll in a page utils
 
 async function isMoreSpaceToScroll(page: Page): Promise<boolean> {
   return await page.evaluate(() => {
@@ -46,14 +50,33 @@ export async function scrollToBottom(page: Page) {
 };
 
 
+// Senitize Data from scraper utils
+
 export function getSenitizedName(linkedInName: string) {
   const senitized = linkedInName.slice(0, linkedInName.indexOf(','));
   return lettersOnly(senitized);
 }
 
-// remove non-letters from a string.
+
 function lettersOnly(str: string) {
-  return str. replace(/[^a-zA-Z]/g, "");
+  return str.replace(/[^a-zA-Z]/g, "");
 }
 
 
+// Misc utils
+
+export function getRandomTimeInterval(timeRange: number, minTime: number): number {
+  return Math.random() * timeRange + minTime;
+};
+
+
+export function editSearchKeyWords(strings: any): string | null { // Todo: change func args
+  const keyWords = strings.join('%20');
+
+  const { SEARCH_URI_DOMAIN, SEARCH_URI_GEO_URN, SEARCH_URI_ORIGIN } = process.env;
+  if (!SEARCH_URI_DOMAIN || !SEARCH_URI_GEO_URN || !SEARCH_URI_ORIGIN) {
+    return null
+  }
+
+  return SEARCH_URI_DOMAIN + SEARCH_URI_GEO_URN + `&keywords=${keyWords}` + SEARCH_URI_ORIGIN;
+}
