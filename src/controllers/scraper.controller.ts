@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
-import { linkedinScraper } from "./puppeteer";
+import { linkedinScraper } from "../scraper/puppeteer";
+import { getNewProfiles } from '../scraper/filterNewProfiles';
 import * as profileServices from '../services/profile.service';
 import { ProfileDocument } from "../models/profile.model";
-import { getNewProfiles } from './filterNewProfiles';
 
 export async function scraperInit(req: Request, res: Response) {
   try {

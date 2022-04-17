@@ -1,5 +1,5 @@
 import express, { Request, Response } from 'express';
-import { scraperInit } from '../scraper/scraper.controller';
+import { scraperInit } from '../controllers/scraper.controller';
 
 // TODO: Create content and security validation middlewere for all input
 
