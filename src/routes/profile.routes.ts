@@ -16,6 +16,6 @@ Router.post('/profiles', profileControllers.getProfiles);
 
 Router.put('/profile', profileControllers.updateProfile);
 
-Router.delete('/profile', profileControllers.deleteProfile);
+Router.delete('/profile/:id', profileControllers.deleteProfile);
 
 export default Router;

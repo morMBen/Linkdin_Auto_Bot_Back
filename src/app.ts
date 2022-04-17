@@ -18,13 +18,12 @@ app.use(express.urlencoded({ extended: false }));
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
   console.error(err);
   if (err) return res.status(err.status).send(err)
-
   return next(req); 
 });
 
 app.use('/api', router);
 
-app.use(((req: Request, res: Response, next: any) => {
+app.use(((req: Request, res: Response, next: NextFunction) => {
   res.status(404).send('Page Not Found');
 })); //as express.ErrorRequestHandler);
 
