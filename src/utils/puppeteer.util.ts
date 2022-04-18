@@ -72,8 +72,8 @@ export function getRandomTimeInterval(timeRange: number, minTime: number): numbe
 
 
 export function editSearchKeyWords(keyWords: I_SearchDocument[]): string | null { // Todo: change func args
-  const searchStr = keyWords.reduce((reducer: string, keyWord:I_SearchDocument) => {
-    return reducer + '%20' + keyWord.searchWord;
+  const searchWords = keyWords.reduce((accumulator: string, keyWord:I_SearchDocument) => {
+    return accumulator + '%20' + keyWord.searchWord;
   }, '');
 
   const { SEARCH_URI_DOMAIN, SEARCH_URI_GEO_URN, SEARCH_URI_ORIGIN } = process.env;
@@ -81,5 +81,5 @@ export function editSearchKeyWords(keyWords: I_SearchDocument[]): string | null 
     return null
   }
 
-  return SEARCH_URI_DOMAIN + SEARCH_URI_GEO_URN + `&keywords=${keyWords}` + SEARCH_URI_ORIGIN;
+  return SEARCH_URI_DOMAIN + SEARCH_URI_GEO_URN + `&keywords=${searchWords}` + SEARCH_URI_ORIGIN;
 }
