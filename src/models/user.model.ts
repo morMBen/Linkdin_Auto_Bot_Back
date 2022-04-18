@@ -2,13 +2,16 @@ import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
 
 export interface I_UserDocument extends mongoose.Document {
+  _id?: string;
   name: string;
   password: string;
+  tokens: { token: string }[];
 }
 
 const UserSchema: mongoose.Schema<I_UserDocument> = new mongoose.Schema({
   name: { type: String, unique: true },
   password: { type: String },
+  tokens: [{ token: { type: String, unique: true } }],
 });
 
 UserSchema.pre('save', async function (next) {
