@@ -2,6 +2,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { config } from 'dotenv';
 import { Page } from 'puppeteer';
+import { I_SearchDocument } from '../models/search.model';
 
 config({ path: path.resolve(__dirname, '../.env') });
 
@@ -70,8 +71,10 @@ export function getRandomTimeInterval(timeRange: number, minTime: number): numbe
 };
 
 
-export function editSearchKeyWords(strings: any): string | null { // Todo: change func args
-  const keyWords = strings.join('%20');
+export function editSearchKeyWords(keyWords: I_SearchDocument[]): string | null { // Todo: change func args
+  const searchStr = keyWords.reduce((reducer: string, keyWord:I_SearchDocument) => {
+    return reducer + '%20' + keyWord.searchWord;
+  }, '');
 
   const { SEARCH_URI_DOMAIN, SEARCH_URI_GEO_URN, SEARCH_URI_ORIGIN } = process.env;
   if (!SEARCH_URI_DOMAIN || !SEARCH_URI_GEO_URN || !SEARCH_URI_ORIGIN) {
