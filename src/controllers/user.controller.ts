@@ -23,7 +23,6 @@ export const registerOne = async (req: Request, res: Response) => {
 
 export const getMyAccount = async (req: CustomRequest, res: Response) => {
   try {
-    console.log('get my account controler', req.token);
     res.status(200).send(req.token);
   } catch (error) {
     res.status(500).send(getErrorMessage(error));

@@ -1,10 +1,10 @@
-import jwt, { Secret } from 'jsonwebtoken';
+import jwt, { Secret, JwtPayload } from 'jsonwebtoken';
 import { Request, Response, NextFunction } from 'express';
-import UserModel from '../models/user.model';
 
 export const SECRET_KEY: Secret = 'newtokennewtoken';
+
 export interface CustomRequest extends Request {
-  token: any;
+  token: string | JwtPayload;
 }
 
 export const auth = async (req: Request, res: Response, next: NextFunction) => {
