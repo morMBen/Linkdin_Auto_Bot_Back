@@ -12,6 +12,8 @@ export async function add(searchWord: DocumentDefinition<I_SearchDocument>): Pro
 
 export async function all() {
   try {
+    // console.log("all");
+    // return []
     return await SearchModel.find();
   } catch (error) {
     throw error;

@@ -71,7 +71,9 @@ export function getRandomTimeInterval(timeRange: number, minTime: number): numbe
 };
 
 
-export function editSearchKeyWords(keyWords: I_SearchDocument[]): string | null { // Todo: change func args
+export function editSearchKeyWords(keyWords: I_SearchDocument[]): string | null {
+  console.log("editSearchKeyWords");
+  
   const searchWords = keyWords.reduce((accumulator: string, keyWord:I_SearchDocument) => {
     return accumulator + '%20' + keyWord.searchWord;
   }, '');
@@ -80,6 +82,7 @@ export function editSearchKeyWords(keyWords: I_SearchDocument[]): string | null 
   if (!SEARCH_URI_DOMAIN || !SEARCH_URI_GEO_URN || !SEARCH_URI_ORIGIN) {
     return null
   }
-
+  console.log(SEARCH_URI_DOMAIN + SEARCH_URI_GEO_URN + `&keywords=${searchWords}` + SEARCH_URI_ORIGIN);
+  
   return SEARCH_URI_DOMAIN + SEARCH_URI_GEO_URN + `&keywords=${searchWords}` + SEARCH_URI_ORIGIN;
 }
