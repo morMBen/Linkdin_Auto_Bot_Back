@@ -2,7 +2,6 @@ import { DocumentDefinition, FilterQuery} from 'mongoose';
 import SearchModel, {I_SearchDocument} from '../models/search.model';
 
 export async function add(searchWord: DocumentDefinition<I_SearchDocument>): Promise<void> {
-  console.log("add service", searchWord);
     try {
     await SearchModel.create(searchWord);
   } catch (error) {
@@ -12,9 +11,8 @@ export async function add(searchWord: DocumentDefinition<I_SearchDocument>): Pro
 
 export async function all() {
   try {
-    // console.log("all");
-    // return []
-    return await SearchModel.find();
+    const res = await SearchModel.find();
+    return res;
   } catch (error) {
     throw error;
   }

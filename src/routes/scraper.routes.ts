@@ -1,7 +1,5 @@
 import express, { Request, Response } from 'express';
-import { scraperInit } from '../scraper/scraper.controller';
-
-// TODO: Create content and security validation middlewere for all input
+import { scraperInit } from '../controllers/scraper.controller';
 
 const Router = express.Router();
 

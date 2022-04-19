@@ -8,7 +8,7 @@
     "puppeteer": "ts-node-dev --transpile-only ./src/scraper/puppeteer.ts",
     "dev-build": "tsc && npm run start",
     "postinstall": "tsc",
-    "dev": "ts-node-dev --respawn --transpile-only ./src/index.ts",
+    "dev": "ts-node-dev --respawn --transpile-only ./src/tests/puppeteer.test.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
     "deploy": "git add . && git commit -m Heroku && git push heroku master"
   },
