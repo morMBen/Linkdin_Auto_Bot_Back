@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { getErrorMessage } from '../utils/errors.util';
 import * as userServices from '../services/user.service';
+import { CustomRequest } from '../middleware/auth';
 
 export const loginOne = async (req: Request, res: Response) => {
   try {
@@ -20,10 +21,10 @@ export const registerOne = async (req: Request, res: Response) => {
   }
 };
 
-export const getMyAccount = async (req: Request, res: Response) => {
+export const getMyAccount = async (req: CustomRequest, res: Response) => {
   try {
-    const foundUser = await userServices.findOne(req.body);
-    res.status(200).send(foundUser);
+    console.log('get my account controler', req.token);
+    res.status(200).send(req.token);
   } catch (error) {
     res.status(500).send(getErrorMessage(error));
   }

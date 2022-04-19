@@ -1,6 +1,6 @@
 import express, { Request, Response } from 'express';
 import * as userController from '../controllers/user.controller';
-import { auth } from '../middleware/auth';
+import { auth, CustomRequest } from '../middleware/auth';
 
 const Router = express.Router();
 
@@ -10,7 +10,9 @@ Router.get('/healthcheck', (req: Request, res: Response): void => {
 
 Router.post('/login', userController.loginOne);
 Router.post('/register', userController.registerOne);
-//get or post route? data passed via body
-Router.get('/my-account', auth, userController.getMyAccount);
+
+Router.get('/my-account', auth, (req: Request, res: Response) =>
+  userController.getMyAccount(req as CustomRequest, res)
+);
 
 export default Router;
