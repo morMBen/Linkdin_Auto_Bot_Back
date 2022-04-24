@@ -1,12 +1,13 @@
 import express, { Express, Request, Response, NextFunction } from 'express';
 import { connectDb } from './database/connect';
 import cors from 'cors';
-import morgan from 'morgan';
-import helmet from 'helmet';
+import morgan from 'morgan'; //need?
+import helmet from 'helmet'; //need?
 import { corsConfig } from '../config';
 import router from './routes/routerIndex';
 
 const app: Express = express();
+
 connectDb();
 
 app.use(cors(corsConfig));
@@ -17,14 +18,15 @@ app.use(express.urlencoded({ extended: false }));
 
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
   console.error(err);
-  if (err) return res.status(err.status).send(err)
-  return next(req); 
+  if (err) return res.status(err.status).send(err);
+  return next(req);
 });
 
 app.use('/api', router);
 
-app.use(((req: Request, res: Response, next: NextFunction) => {
+//should it be in middleware?
+app.use((req: Request, res: Response) => {
   res.status(404).send('Page Not Found');
-})); //as express.ErrorRequestHandler);
+}); //as express.ErrorRequestHandler);
 
 export { app };
