@@ -1,4 +1,4 @@
-import { DocumentDefinition, FilterQuery } from 'mongoose';
+import { DocumentDefinition } from 'mongoose';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import UserModel, { I_UserDocument } from '../models/user.model';

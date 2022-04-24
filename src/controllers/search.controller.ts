@@ -1,11 +1,10 @@
 import { Request, Response } from 'express';
 import { getErrorMessage } from '../utils/errors.util';
-import { I_SearchDocument } from '../models/search.model';
 import * as searchServices from '../services/search.service';
 
 export async function addOne(req: Request, res: Response) {
   try {
-    const result = await searchServices.add(req.body);
+    await searchServices.add(req.body);
     res.status(200).send('Search word is inserted to DB successfully');
   } catch (error) {
     return res.status(500).send(getErrorMessage(error));
