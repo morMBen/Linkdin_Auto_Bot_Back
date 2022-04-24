@@ -8,8 +8,9 @@ Router.get('/healthcheck', (req: Request, res: Response): void => {
   res.sendStatus(200);
 });
 
-Router.post('/login', userController.loginOne);
-Router.post('/register', userController.registerOne);
+Router.post('/login', userController.login);
+
+Router.post('/register', userController.register);
 
 Router.get('/my-account', auth, (req: Request, res: Response) =>
   userController.getMyAccount(req as CustomRequest, res)

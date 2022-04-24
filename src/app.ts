@@ -1,8 +1,8 @@
 import express, { Express, Request, Response, NextFunction } from 'express';
 import { connectDb } from './database/connect';
 import cors from 'cors';
-import morgan from 'morgan'; //need?
-import helmet from 'helmet'; //need?
+import morgan from 'morgan';
+import helmet from 'helmet';
 import { corsConfig } from '../config';
 import router from './routes/routerIndex';
 
@@ -22,11 +22,10 @@ app.use((err: any, req: Request, res: Response, next: NextFunction) => {
   return next(req);
 });
 
-app.use('/api', router);
-
-//should it be in middleware?
 app.use((req: Request, res: Response) => {
   res.status(404).send('Page Not Found');
-}); //as express.ErrorRequestHandler);
+});
+
+app.use('/api', router);
 
 export { app };
