@@ -1,19 +1,5 @@
 import mongoose from 'mongoose';
-// interface I_Profile {
-//   userId: typeof mongoose.Types.ObjectId;
-//   name: string;
-//   profileName: string;
-//   position: string;
-//   email: string;
-//   profileLink: string;
-//   isEmailSent: boolean;
-//   isStared: boolean;
-//   isVmarked: boolean;
-//   tags: string[];
-//   imageSrc: string;
-//   comment: string;
-//   dateScraped: Date
-// }
+
 
 export interface ProfileDocument extends mongoose.Document {
   //userId: typeof mongoose.Types.ObjectId;

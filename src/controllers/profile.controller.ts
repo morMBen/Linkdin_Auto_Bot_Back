@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
 import { getErrorMessage } from '../utils/errors.util';
 import { ProfileDocument } from '../models/profile.model';
+import { I_Filter, I_Sort } from '../interfaces/profiles.interface';
 import * as profileServices from '../services/profile.service';
-import { PipelineStage } from 'mongoose';
 
 export async function addProfiles(req: Request<{}, {}, ProfileDocument[]>, res: Response) {
   try {
@@ -15,27 +15,23 @@ export async function addProfiles(req: Request<{}, {}, ProfileDocument[]>, res: 
 
 export async function getProfiles(req: Request, res: Response) {
   try {
-    if (!req.body.filter || !req.body.sortBy) {
-      return res.sendStatus(400);
-    }
-
     const { filter, sortBy } = req.body;
+    
+    // if (!filter || !(filter instanceof I_Filter) ||
+    //     !sortBy || !(sortBy instanceof I_Sort)
+    //   ) {
+    //   return res.sendStatus(400);
+    // }
 
-    if (typeof filter !== 'object' || typeof sortBy !== 'object') {
-      return res.sendStatus(400);
-    }
+    // if (typeof filter !== 'object' || typeof sortBy !== 'object') {
+    //   return res.sendStatus(400);
+    // }
 
     // filter.isDeleted = false;
 
-    const stages: PipelineStage[] = [{ $match: filter }];
+    const profiles = await profileServices.getProfiles(filter, sortBy);
 
-    if (Object.keys(sortBy).length > 0) {
-      stages.push({ $sort: sortBy });
-    }
-
-    const profiles = await profileServices.getProfiles(stages);
-
-    return res.send(profiles || []);
+    return res.send(profiles);
   } catch (error) {
     return res.status(500).send(getErrorMessage(error));
   }
