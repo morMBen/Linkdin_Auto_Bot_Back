@@ -1,41 +1,43 @@
-import Airtable from 'airtable';
+import Airtable, { base } from 'airtable';
 import { config } from 'dotenv';
 import * as path from 'path';
+import * as profileServices from '../services/profile.service';
+import { reformatMongoToAirTable } from '../utils/airTable.util';
+
+
+import { connectDb, disconnectDb } from '../database/connect'; // TODO: remove line
+connectDb(); // TODO: remove line
 
 config({ path: path.resolve(__dirname, '../.env') });
 
+const updateTable = async () => {  
+  try {
+    const base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY })
+      .base(process.env.AIRTABLE_BASE_KEY || '');
 
-const base = new Airtable({apiKey: process.env.AIRTABLE_API_KEY}).base('appq2ntvhHq30MiT8');
+    const profilesData = await profileServices.getProfiles([{ $match: {} }]);
+    const airTableData = reformatMongoToAirTable(profilesData);    
+    // const airTableDataJSON = JSON.stringify(airTableData);
+    
+    console.log("profilesData.length = ", profilesData.length);
+    const promises = airTableData.map((batch) => {
+      base.table('Table1').create(batch)
+      .catch((error: any) => {
+        console.error(error);
+      })
+    });
 
-base('Table 1').select({
-  // Selecting the first 3 records in Grid view:
-  maxRecords: 3,
-  view: "Grid view",
-  fields: ["fldg01YA673VBUzFb", "fldMFOfCBcfw3TVLz"],
-}).eachPage(function page(records, fetchNextPage) {
-  // This function (`page`) will get called for each page of records.
-
-  records.forEach(function(record) {
-      console.log('Retrieved', record.get("test field 1"));
-  });
-
-  // To fetch the next page of records, call `fetchNextPage`.
-  // If there are more records, `page` will get called again.
-  // If there are no more records, `done` will get called.
-  fetchNextPage();
-
-}, function done(err) {
-  if (err) { 
-    console.error(err); return; 
+    Promise.all(promises);
+    // console.log({records});
+  } catch (error: any) {
+    console.error( error); // `Error: ${error.message}` ||
+    // throw error;
+  } finally {
+    disconnectDb(); // TODO: remove line
   }
-});
+}
+
+updateTable();
 
 
-base('Table 1').find('recZleghsupzhi1hF', function(err, record) {
-  if (record) { 
-    console.log('Retrieved', record.id);
-    return; 
-  }
 
-  console.error(err); 
-});

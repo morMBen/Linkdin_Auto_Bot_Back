@@ -13,3 +13,15 @@ export async function connectDb(): Promise<void> {
     console.log("mongoose connect Error: ", error);
   }
 }
+
+
+export async function disconnectDb(): Promise<void> {
+  try { 
+    await mongoose.disconnect();
+    const { host, name, port } = mongoose.connection;
+    console.log("mongoose disconnected from atlas at: ", { host, name, port })  
+  } catch (error) {
+    console.log("mongoose disconnection Error: ", error);
+  }
+}
+

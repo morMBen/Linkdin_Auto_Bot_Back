@@ -11,7 +11,7 @@ export async function addProfiles(data: DocumentDefinition<ProfileDocument[]>): 
   }
 }
 
-export async function getProfiles(stages: PipelineStage[]) {
+export async function getProfiles(stages: PipelineStage[]): Promise<ProfileDocument[]> {
   return await ProfileModel.aggregate(stages);
 }
 
