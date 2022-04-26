@@ -1,8 +1,9 @@
 import { Request, Response } from 'express';
 import { getErrorMessage } from '../utils/errors.util';
 import { ProfileDocument } from '../models/profile.model';
-import { I_Filter, I_Sort } from '../interfaces/profiles.interface';
 import * as profileServices from '../services/profile.service';
+import { iSortGuard } from '../utils/profiles.util';
+import { iFilterGuard } from '../utils/profiles.util';
 
 export async function addProfiles(req: Request<{}, {}, ProfileDocument[]>, res: Response) {
   try {
@@ -17,15 +18,12 @@ export async function getProfiles(req: Request, res: Response) {
   try {
     const { filter, sortBy } = req.body;
     
-    // if (!filter || !(filter instanceof I_Filter) ||
-    //     !sortBy || !(sortBy instanceof I_Sort)
-    //   ) {
-    //   return res.sendStatus(400);
-    // }
-
-    // if (typeof filter !== 'object' || typeof sortBy !== 'object') {
-    //   return res.sendStatus(400);
-    // }
+    if (!filter || !(iFilterGuard(filter)) ||
+        !sortBy || !(iSortGuard(sortBy))
+      ) {
+        
+      return res.sendStatus(400);
+    }
 
     // filter.isDeleted = false;
 

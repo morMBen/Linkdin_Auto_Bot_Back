@@ -19,6 +19,8 @@
     "node": "16.13.1"
   },
   "dependencies": {
+    "@babel/generator": "^7.17.9",
+    "@types/babel__generator": "^7.6.4",
     "@types/cors": "^2.8.12",
     "@types/helmet": "^4.0.0",
     "@types/morgan": "^1.9.3",
