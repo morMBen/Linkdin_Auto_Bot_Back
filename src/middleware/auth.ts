@@ -1,7 +1,11 @@
 import jwt, { Secret, JwtPayload } from 'jsonwebtoken';
 import { Request, Response, NextFunction } from 'express';
+import { config } from 'dotenv';
+import * as path from 'path';
 
-export const SECRET_KEY: Secret = 'newtokennewtoken';
+config({ path: path.resolve(__dirname, '../.env') });
+
+export const SECRET_KEY: Secret = process.env.SECRET_KEY || '';
 
 export interface CustomRequest extends Request {
   token: string | JwtPayload;
