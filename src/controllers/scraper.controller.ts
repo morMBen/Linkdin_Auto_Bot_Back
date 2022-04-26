@@ -6,6 +6,7 @@ import { getNewProfiles } from '../scraper/filterNewProfiles';
 
 export async function scraperInit(req: Request, res: Response) {
   try {
+    res.sendStatus(200);
     const scrapeResults: ProfileDocument[] = await linkedinScraper();
     const newProfiles: ProfileDocument[] | null = await getNewProfiles(scrapeResults);
     if (!newProfiles) {
@@ -13,7 +14,7 @@ export async function scraperInit(req: Request, res: Response) {
     }
 
     await profileServices.addProfiles(newProfiles);
-    return res.sendStatus(200);
+    return ;
   } catch (error) {
     console.error(error);
     return res.status(500).send("LinkedIn scrape failed");
