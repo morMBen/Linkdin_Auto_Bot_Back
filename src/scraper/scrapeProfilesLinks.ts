@@ -1,10 +1,16 @@
 import { Page, ElementHandle } from 'puppeteer';
+import { all } from '../services/search.service';
 import * as utils from '../utils/puppeteer.util';
 
 
 export async function getAllLinks(page: Page): Promise<any> {
   try {
-    await page.goto(`${process.env.SEARCH_URI}`);
+    const keys = await all();    
+    const searchURI = utils.editSearchKeyWords(keys);
+    if (!searchURI) {
+      throw new Error("search URI not found");
+    } 
+    await page.goto(searchURI);
   
     const searchResults: string[] = [];
 

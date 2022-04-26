@@ -16,7 +16,7 @@ export async function scrapeSingleProfile(page: Page, url: string): Promise<Prof
       if (imageSrc) profileData.imageSrc = (imageSrc as HTMLImageElement).src;
     
       const name =  document.querySelector('h1'); 
-      if (name) profileData.name = utils.getSenitizedName(name.innerText);
+      if (name) profileData.name = name.innerText;
     
       const position = document.querySelector('div.text-body-medium.break-words');
       if (position) profileData.position = (position as HTMLElement).innerText; 
@@ -39,6 +39,9 @@ export async function scrapeSingleProfile(page: Page, url: string): Promise<Prof
       return profileData;
     }, randTime);
   
+    const sanitizedName = utils.getSanitizedName(res.name);
+    res.name = sanitizedName;
+
     return res;
   } catch (error) {
     console.error(error);

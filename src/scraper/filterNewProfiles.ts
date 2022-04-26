@@ -4,7 +4,7 @@ import * as profileServices from '../services/profile.service';
 
 export async function getNewProfiles(scrapeResults: ProfileDocument[]): Promise<ProfileDocument[] | null> {
   try {
-    const profilesInDB = await profileServices.getProfiles([{ $match: {} }]);
+    const profilesInDB = await profileServices.getProfiles({}, {});
     if (!profilesInDB) {
       return null
     };

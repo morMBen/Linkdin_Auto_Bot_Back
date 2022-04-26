@@ -1,9 +1,12 @@
 import * as fs from 'fs';
+import * as path from 'path';
+import { config } from 'dotenv';
 import { Page } from 'puppeteer';
+import { I_SearchDocument } from '../models/search.model';
 
-export function getRandomTimeInterval(timeRange: number, minTime: number): number {
-  return Math.random() * timeRange + minTime;
-};
+config({ path: path.resolve(__dirname, '../.env') });
+
+// Scraped websites' cookies utils
 
 export async function setLinkedinCookies(page: Page): Promise<void> {
   const storedCookies = fs.readFileSync('./cookies.json', 'utf8');
@@ -17,6 +20,8 @@ export async function getLinkedinCookies(page: Page): Promise<void> {
   fs.writeFileSync('./cookies.json', cookieJson);
 }
 
+
+// Scroll in a page utils
 
 async function isMoreSpaceToScroll(page: Page): Promise<boolean> {
   return await page.evaluate(() => {
@@ -46,14 +51,35 @@ export async function scrollToBottom(page: Page) {
 };
 
 
-export function getSenitizedName(linkedInName: string) {
+// Senitize Data from scraper utils
+
+export function getSanitizedName(linkedInName: string) {
   const senitized = linkedInName.slice(0, linkedInName.indexOf(','));
   return lettersOnly(senitized);
 }
 
-// remove non-letters from a string.
+
 function lettersOnly(str: string) {
-  return str. replace(/[^a-zA-Z]/g, "");
+  return str.replace(/[^a-zA-Z]/g, "");
 }
 
 
+// Misc utils
+
+export function getRandomTimeInterval(timeRange: number, minTime: number): number {
+  return Math.random() * timeRange + minTime;
+};
+
+
+export function editSearchKeyWords(keyWords: I_SearchDocument[]): string | null {
+  const searchWords = keyWords.reduce((accumulator: string, keyWord:I_SearchDocument) => {
+    return accumulator + '%20' + keyWord.searchWord;
+  }, '');
+
+  const { SEARCH_URI_DOMAIN, SEARCH_URI_GEO_URN, SEARCH_URI_ORIGIN } = process.env;
+  if (!SEARCH_URI_DOMAIN || !SEARCH_URI_GEO_URN || !SEARCH_URI_ORIGIN) {
+    return null
+  }
+  
+  return SEARCH_URI_DOMAIN + SEARCH_URI_GEO_URN + `&keywords=${searchWords}` + SEARCH_URI_ORIGIN;
+}

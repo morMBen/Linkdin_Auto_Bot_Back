@@ -22,10 +22,10 @@ app.use((err: any, req: Request, res: Response, next: NextFunction) => {
   return next(req);
 });
 
-app.use((req: Request, res: Response) => {
-  res.status(404).send('Page Not Found');
-});
-
 app.use('/api', router);
+
+app.use((req: Request, res: Response) => {
+  res.status(404).send('Page Not Found'); 
+});
 
 export { app };

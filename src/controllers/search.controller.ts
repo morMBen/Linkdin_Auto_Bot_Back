@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { getErrorMessage } from '../utils/errors.util';
 import * as searchServices from '../services/search.service';
+import { editSearchKeyWords } from '../utils/puppeteer.util';
 
 export async function addOne(req: Request, res: Response) {
   try {
@@ -13,8 +14,8 @@ export async function addOne(req: Request, res: Response) {
 
 export async function getAll(req: Request, res: Response) {
   try {
-    const profiles = await searchServices.all();
-    return res.status(200).send(profiles);
+    const searchWords = await searchServices.all();
+    return res.status(200).send(searchWords);
   } catch (error) {
     return res.status(500).send(getErrorMessage(error));
   }
