@@ -14,7 +14,7 @@ export const linkedinScraper = async () => {
   let browser = null;
   try {
     browser = await puppeteer.launch({
-      headless: false,
+      headless: process.env.ENV === 'Production' ? true : false,
       defaultViewport: null,
       slowMo: utils.getRandomTimeInterval(750, 750),
     });
