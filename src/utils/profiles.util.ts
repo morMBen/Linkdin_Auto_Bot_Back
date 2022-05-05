@@ -10,10 +10,12 @@ const TESTER: I_Filter = {
 };
 
 export const iFilterGuard = (filter: any): boolean => {  
-  for (const key in filter) {
-    if (!(key in TESTER) || typeof filter[key] !== typeof TESTER[key as keyof typeof TESTER]) {
-      
-      return false;
+  if (Object.keys(filter).length > 0) {
+    for (const key in filter) {
+      if (!(key in TESTER) || typeof filter[key] !== typeof TESTER[key as keyof typeof TESTER]) {
+        
+        return false;
+      }
     }
   }
   
@@ -24,9 +26,11 @@ export const iFilterGuard = (filter: any): boolean => {
 export const iSortGuard = (sortBy: any): boolean => {
   const { field, order } = sortBy;
   
-  if (!field && order) return false
-  if (!(field in TESTER)) return false;
-  if (order !== 1 && order !== -1) return false;
-  
+  if (Object.keys(sortBy).length > 0) {
+    if (!field && order) return false
+    if (!(field in TESTER)) return false;
+    if (order !== 1 && order !== -1) return false;
+  }
+    
   return true
 }

@@ -25,7 +25,7 @@ export async function getProfiles(req: Request, res: Response) {
       return res.sendStatus(400);
     }
 
-    // filter.isDeleted = false;
+    filter.isDeleted = false;
 
     const profiles = await profileServices.getProfiles(filter, sortBy);
 
@@ -53,7 +53,6 @@ export async function updateProfile(req: Request<{}, {}, ProfileDocument>, res: 
   }
 }
 
-// TODO: collect emails to separate collection
 export async function deleteProfile(req: Request, res: Response) {
   try {
     const { profileId } = req.query;
