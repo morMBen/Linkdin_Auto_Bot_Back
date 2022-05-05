@@ -1,10 +1,4 @@
 export const corsConfig = {
-  origin: [
-    'http://localhost:3000',
-    'https://localhost:3000',
-    'http://appleseedsTodo.herokuapp.com',
-    'https://appleseedsTodo.herokuapp.com',
-    `https://linkdin-auto-bot-back.herokuapp.com`,
-  ],
+  origin: ['http://localhost:3000', 'https://velocity-ventures-linkedin-autobot.netlify.app/'],
   methods: ['GET', 'PUT', 'POST', 'DELETE'],
 };
