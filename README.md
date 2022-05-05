@@ -5,7 +5,7 @@
 The application is aimed to crawl in Linkedin and collect data of accounts according to search settings.
 
 **Preset in search:**
-Search is carried out in Israel. But there are no other presets of search words: users can add or delete search words, run the scraper manually.
+Search is carried out in Israel. But there are no other presets of search words: users can add or delete search words, run the scraper manually.\
 
 The application is designed for working on the found profiles by 1 team.
 
@@ -45,13 +45,13 @@ Backend of the application was deployed on [Heroku - Linkedin Autobot Backend](h
 2. Login in Linkedin with cookies (set cookies into Chromium)
 3. Getting new cookies, storing them and setting them into Chromium
 4. Scrapping and getting links of all profiles
-5. Scrapping each profile
+5. Scrapping each profile\
    Some users of Linkedin limit access to their profiles if he/she is not in the first connection. Because of this setting we check if the account is not closed and don't add the scrapper result to the database.
-6. Checking if the scrapped profiles exists in the database
+6. Checking if the scrapped profiles exists in the database\
    If the profile has already existed, we don't add it to the database.
 
 **Challenge:**
-Linkedin tries to block attempts of scrapping its web site and want to make sure that the real person searches for results.
+Linkedin tries to block attempts of scrapping its web site and want to make sure that the real person searches for results.\
 In this project we tried to imitate the human behaviour by adding random time interval between each action.
 
 ## Hashing with Bcrypt
